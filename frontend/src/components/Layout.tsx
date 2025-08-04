@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { 
   Home, Users, Package, Factory, Route, FileText, 
-  ClipboardList, Wrench, CheckSquare, LogOut, Settings
+  ClipboardList, LogOut, Settings
 } from 'lucide-react'
 
 interface LayoutProps {
@@ -22,8 +22,6 @@ export default function Layout({ children }: LayoutProps) {
     { name: '工艺路线', href: '/routings', icon: Route, roles: ['manager'] },
     { name: '物料清单', href: '/boms', icon: FileText, roles: ['manager'] },
     { name: '工单管理', href: '/work-orders', icon: ClipboardList, roles: ['manager'] },
-    { name: '生产任务', href: '/production-tasks', icon: Wrench, roles: ['worker', 'manager'] },
-    { name: '检验任务', href: '/inspection-tasks', icon: CheckSquare, roles: ['inspector', 'manager'] },
   ]
 
   const filteredNavigation = navigation.filter(item => 

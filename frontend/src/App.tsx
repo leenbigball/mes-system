@@ -9,8 +9,6 @@ import RoutingsPage from './pages/RoutingsPage'
 import BOMsPage from './pages/BOMsPage'
 import WorkOrdersPage from './pages/WorkOrdersPage'
 import WorkOrderDetailPage from './pages/WorkOrderDetailPage'
-import ProductionTasksPage from './pages/ProductionTasksPage'
-import InspectionTasksPage from './pages/InspectionTasksPage'
 import Layout from './components/Layout'
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -87,20 +85,6 @@ function App() {
               <ProtectedRoute>
                 <Layout>
                   <WorkOrderDetailPage />
-                </Layout>
-              </ProtectedRoute>
-            } />
-            <Route path="/production-tasks" element={
-              <ProtectedRoute>
-                <Layout>
-                  <ProductionTasksPage />
-                </Layout>
-              </ProtectedRoute>
-            } />
-            <Route path="/inspection-tasks" element={
-              <ProtectedRoute>
-                <Layout>
-                  <InspectionTasksPage />
                 </Layout>
               </ProtectedRoute>
             } />

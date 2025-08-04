@@ -1,13 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../contexts/AuthContext'
-import { Package, Factory, ClipboardList, Wrench, CheckSquare, Users } from 'lucide-react'
+import { Package, Factory, ClipboardList, Users } from 'lucide-react'
 
 interface Stats {
   materials: number
   production_lines: number
   work_orders: number
-  production_tasks: number
-  inspection_tasks: number
   users: number
 }
 
@@ -17,8 +15,6 @@ export default function DashboardPage() {
     materials: 0,
     production_lines: 0,
     work_orders: 0,
-    production_tasks: 0,
-    inspection_tasks: 0,
     users: 0
   })
 
@@ -31,12 +27,10 @@ export default function DashboardPage() {
       const token = localStorage.getItem('token')
       const headers = { 'Authorization': `Bearer ${token}` }
       
-      const [materialsRes, linesRes, ordersRes, tasksRes, inspectionsRes, usersRes] = await Promise.allSettled([
+      const [materialsRes, linesRes, ordersRes, usersRes] = await Promise.allSettled([
         fetch('https://app-twlwzpul.fly.dev/api/materials', { headers }),
         fetch('https://app-twlwzpul.fly.dev/api/production-lines', { headers }),
         fetch('https://app-twlwzpul.fly.dev/api/work-orders', { headers }),
-        fetch('https://app-twlwzpul.fly.dev/api/production-tasks', { headers }),
-        fetch('https://app-twlwzpul.fly.dev/api/inspection-tasks', { headers }),
         user?.role === 'admin' ? fetch('https://app-twlwzpul.fly.dev/api/users', { headers }) : Promise.resolve({ ok: false })
       ])
 
@@ -55,16 +49,6 @@ export default function DashboardPage() {
         setStats(prev => ({ ...prev, work_orders: data.length }))
       }
       
-      if (tasksRes.status === 'fulfilled' && tasksRes.value.ok) {
-        const data = await tasksRes.value.json()
-        setStats(prev => ({ ...prev, production_tasks: data.length }))
-      }
-      
-      if (inspectionsRes.status === 'fulfilled' && inspectionsRes.value.ok) {
-        const data = await inspectionsRes.value.json()
-        setStats(prev => ({ ...prev, inspection_tasks: data.length }))
-      }
-      
       if (usersRes.status === 'fulfilled' && usersRes.value.ok) {
         const data = await (usersRes.value as Response).json()
         setStats(prev => ({ ...prev, users: data.length }))
@@ -78,8 +62,6 @@ export default function DashboardPage() {
     { name: '物料', value: stats.materials, icon: Package, color: 'bg-blue-500', roles: ['manager'] },
     { name: '产线', value: stats.production_lines, icon: Factory, color: 'bg-green-500', roles: ['manager'] },
     { name: '工单', value: stats.work_orders, icon: ClipboardList, color: 'bg-yellow-500', roles: ['manager'] },
-    { name: '生产任务', value: stats.production_tasks, icon: Wrench, color: 'bg-purple-500', roles: ['worker', 'manager'] },
-    { name: '检验任务', value: stats.inspection_tasks, icon: CheckSquare, color: 'bg-red-500', roles: ['inspector', 'manager'] },
     { name: '用户', value: stats.users, icon: Users, color: 'bg-indigo-500', roles: ['admin'] },
   ]
 
@@ -142,8 +124,8 @@ export default function DashboardPage() {
                 <p className="mt-1">
                   {user?.role === 'admin' && '您可以管理系统用户和初始化测试数据。'}
                   {user?.role === 'manager' && '您可以管理主数据、创建工单并分配任务。'}
-                  {user?.role === 'worker' && '您可以查看和执行分配给您的生产任务。'}
-                  {user?.role === 'inspector' && '您可以查看和执行分配给您的检验任务。'}
+                  {user?.role === 'worker' && '您可以查看和执行工作任务。'}
+                  {user?.role === 'inspector' && '您可以查看和执行质量检验工作。'}
                 </p>
               </div>
             </div>
