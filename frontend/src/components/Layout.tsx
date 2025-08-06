@@ -30,7 +30,7 @@ export default function Layout({ children }: LayoutProps) {
 
   const handleInitTestData = async () => {
     try {
-      const response = await fetch('https://app-twlwzpul.fly.dev/api/init-test-data', {
+      const response = await fetch('https://app-npkmklju.fly.dev/api/init-test-data', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,

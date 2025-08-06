@@ -25,7 +25,7 @@ export default function UsersPage() {
   const fetchUsers = async () => {
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch('https://app-twlwzpul.fly.dev/api/users', {
+      const response = await fetch('https://app-npkmklju.fly.dev/api/users', {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       if (response.ok) {
@@ -43,7 +43,7 @@ export default function UsersPage() {
     e.preventDefault()
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch('https://app-twlwzpul.fly.dev/api/users', {
+      const response = await fetch('https://app-npkmklju.fly.dev/api/users', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -70,7 +70,7 @@ export default function UsersPage() {
     
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch(`https://app-twlwzpul.fly.dev/api/users/${userId}`, {
+      const response = await fetch(`https://app-npkmklju.fly.dev/api/users/${userId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       })

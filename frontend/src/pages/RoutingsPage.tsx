@@ -44,7 +44,7 @@ export default function RoutingsPage() {
   const fetchRoutings = async () => {
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch('https://app-twlwzpul.fly.dev/api/routings', {
+      const response = await fetch('https://app-npkmklju.fly.dev/api/routings', {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       if (response.ok) {
@@ -61,7 +61,7 @@ export default function RoutingsPage() {
   const fetchMaterials = async () => {
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch('https://app-twlwzpul.fly.dev/api/materials', {
+      const response = await fetch('https://app-npkmklju.fly.dev/api/materials', {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       if (response.ok) {
@@ -97,7 +97,7 @@ export default function RoutingsPage() {
     e.preventDefault()
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch('https://app-twlwzpul.fly.dev/api/routings', {
+      const response = await fetch('https://app-npkmklju.fly.dev/api/routings', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -128,7 +128,7 @@ export default function RoutingsPage() {
     
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch(`https://app-twlwzpul.fly.dev/api/routings/${routingId}`, {
+      const response = await fetch(`https://app-npkmklju.fly.dev/api/routings/${routingId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       })

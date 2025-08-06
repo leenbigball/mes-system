@@ -41,7 +41,7 @@ export default function WorkOrdersPage() {
   const fetchWorkOrders = async () => {
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch('https://app-twlwzpul.fly.dev/api/work-orders', {
+      const response = await fetch('https://app-npkmklju.fly.dev/api/work-orders', {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       if (response.ok) {
@@ -58,7 +58,7 @@ export default function WorkOrdersPage() {
   const fetchBOMs = async () => {
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch('https://app-twlwzpul.fly.dev/api/boms', {
+      const response = await fetch('https://app-npkmklju.fly.dev/api/boms', {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       if (response.ok) {
@@ -74,7 +74,7 @@ export default function WorkOrdersPage() {
     e.preventDefault()
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch('https://app-twlwzpul.fly.dev/api/work-orders', {
+      const response = await fetch('https://app-npkmklju.fly.dev/api/work-orders', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

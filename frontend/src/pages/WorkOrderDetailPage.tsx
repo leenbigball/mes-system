@@ -99,7 +99,7 @@ export default function WorkOrderDetailPage() {
   const fetchWorkOrderDetail = async () => {
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch(`https://app-twlwzpul.fly.dev/api/work-orders/${id}`, {
+      const response = await fetch(`https://app-npkmklju.fly.dev/api/work-orders/${id}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       if (response.ok) {
@@ -116,7 +116,7 @@ export default function WorkOrderDetailPage() {
   const fetchUsers = async () => {
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch('https://app-twlwzpul.fly.dev/api/workers-inspectors', {
+      const response = await fetch('https://app-npkmklju.fly.dev/api/workers-inspectors', {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       if (response.ok) {
@@ -131,7 +131,7 @@ export default function WorkOrderDetailPage() {
   const fetchProductionLines = async () => {
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch('https://app-twlwzpul.fly.dev/api/production-lines', {
+      const response = await fetch('https://app-npkmklju.fly.dev/api/production-lines', {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       if (response.ok) {
@@ -147,7 +147,7 @@ export default function WorkOrderDetailPage() {
     e.preventDefault()
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch('https://app-twlwzpul.fly.dev/api/production-tasks', {
+      const response = await fetch('https://app-npkmklju.fly.dev/api/production-tasks', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -190,7 +190,7 @@ export default function WorkOrderDetailPage() {
       }
       
       const token = localStorage.getItem('token')
-      const response = await fetch(`https://app-twlwzpul.fly.dev/api/inspection-tasks/${inspectionTask.id}/assign`, {
+      const response = await fetch(`https://app-npkmklju.fly.dev/api/inspection-tasks/${inspectionTask.id}/assign`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

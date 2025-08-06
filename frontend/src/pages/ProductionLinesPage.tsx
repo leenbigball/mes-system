@@ -24,7 +24,7 @@ export default function ProductionLinesPage() {
   const fetchLines = async () => {
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch('https://app-twlwzpul.fly.dev/api/production-lines', {
+      const response = await fetch('https://app-npkmklju.fly.dev/api/production-lines', {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       if (response.ok) {
@@ -42,7 +42,7 @@ export default function ProductionLinesPage() {
     e.preventDefault()
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch('https://app-twlwzpul.fly.dev/api/production-lines', {
+      const response = await fetch('https://app-npkmklju.fly.dev/api/production-lines', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -70,7 +70,7 @@ export default function ProductionLinesPage() {
     
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch(`https://app-twlwzpul.fly.dev/api/production-lines/${editingLine.id}`, {
+      const response = await fetch(`https://app-npkmklju.fly.dev/api/production-lines/${editingLine.id}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -96,7 +96,7 @@ export default function ProductionLinesPage() {
     
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch(`https://app-twlwzpul.fly.dev/api/production-lines/${lineId}`, {
+      const response = await fetch(`https://app-npkmklju.fly.dev/api/production-lines/${lineId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       })

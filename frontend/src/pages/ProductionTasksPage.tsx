@@ -36,7 +36,7 @@ export default function ProductionTasksPage() {
   const fetchTasks = async () => {
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch('https://app-twlwzpul.fly.dev/api/production-tasks', {
+      const response = await fetch('https://app-npkmklju.fly.dev/api/production-tasks', {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       if (response.ok) {
@@ -53,7 +53,7 @@ export default function ProductionTasksPage() {
   const handleStartTask = async (taskId: string) => {
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch(`https://app-twlwzpul.fly.dev/api/production-tasks/${taskId}/start`, {
+      const response = await fetch(`https://app-npkmklju.fly.dev/api/production-tasks/${taskId}/start`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` }
       })
@@ -75,7 +75,7 @@ export default function ProductionTasksPage() {
     
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch(`https://app-twlwzpul.fly.dev/api/production-tasks/${selectedTask.id}/feed-material`, {
+      const response = await fetch(`https://app-npkmklju.fly.dev/api/production-tasks/${selectedTask.id}/feed-material`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -90,7 +90,7 @@ export default function ProductionTasksPage() {
       if (response.ok) {
         setFeedingMaterial({ materialId: '', quantity: 0 })
         fetchTasks()
-        const updatedResponse = await fetch(`https://app-twlwzpul.fly.dev/api/production-tasks`, {
+        const updatedResponse = await fetch(`https://app-npkmklju.fly.dev/api/production-tasks`, {
           headers: { 'Authorization': `Bearer ${token}` }
         })
         if (updatedResponse.ok) {
@@ -113,7 +113,7 @@ export default function ProductionTasksPage() {
     
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch(`https://app-twlwzpul.fly.dev/api/production-tasks/${selectedTask.id}/report-production`, {
+      const response = await fetch(`https://app-npkmklju.fly.dev/api/production-tasks/${selectedTask.id}/report-production`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

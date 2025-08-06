@@ -28,7 +28,7 @@ export default function InspectionTasksPage() {
   const fetchTasks = async () => {
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch('https://app-twlwzpul.fly.dev/api/inspection-tasks', {
+      const response = await fetch('https://app-npkmklju.fly.dev/api/inspection-tasks', {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       if (response.ok) {
@@ -45,7 +45,7 @@ export default function InspectionTasksPage() {
   const handleStartTask = async (taskId: string) => {
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch(`https://app-twlwzpul.fly.dev/api/inspection-tasks/${taskId}/start`, {
+      const response = await fetch(`https://app-npkmklju.fly.dev/api/inspection-tasks/${taskId}/start`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` }
       })
@@ -67,7 +67,7 @@ export default function InspectionTasksPage() {
     
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch(`https://app-twlwzpul.fly.dev/api/inspection-tasks/${selectedTask.id}/report-inspection`, {
+      const response = await fetch(`https://app-npkmklju.fly.dev/api/inspection-tasks/${selectedTask.id}/report-inspection`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

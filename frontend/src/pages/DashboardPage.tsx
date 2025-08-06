@@ -28,10 +28,10 @@ export default function DashboardPage() {
       const headers = { 'Authorization': `Bearer ${token}` }
       
       const [materialsRes, linesRes, ordersRes, usersRes] = await Promise.allSettled([
-        fetch('https://app-twlwzpul.fly.dev/api/materials', { headers }),
-        fetch('https://app-twlwzpul.fly.dev/api/production-lines', { headers }),
-        fetch('https://app-twlwzpul.fly.dev/api/work-orders', { headers }),
-        user?.role === 'admin' ? fetch('https://app-twlwzpul.fly.dev/api/users', { headers }) : Promise.resolve({ ok: false })
+        fetch('https://app-npkmklju.fly.dev/api/materials', { headers }),
+        fetch('https://app-npkmklju.fly.dev/api/production-lines', { headers }),
+        fetch('https://app-npkmklju.fly.dev/api/work-orders', { headers }),
+        user?.role === 'admin' ? fetch('https://app-npkmklju.fly.dev/api/users', { headers }) : Promise.resolve({ ok: false })
       ])
 
       if (materialsRes.status === 'fulfilled' && materialsRes.value.ok) {

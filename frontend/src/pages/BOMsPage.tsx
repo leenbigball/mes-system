@@ -56,7 +56,7 @@ export default function BOMsPage() {
   const fetchBOMs = async () => {
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch('https://app-twlwzpul.fly.dev/api/boms', {
+      const response = await fetch('https://app-npkmklju.fly.dev/api/boms', {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       if (response.ok) {
@@ -73,7 +73,7 @@ export default function BOMsPage() {
   const fetchMaterials = async () => {
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch('https://app-twlwzpul.fly.dev/api/materials', {
+      const response = await fetch('https://app-npkmklju.fly.dev/api/materials', {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       if (response.ok) {
@@ -88,7 +88,7 @@ export default function BOMsPage() {
   const fetchRoutings = async () => {
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch('https://app-twlwzpul.fly.dev/api/routings', {
+      const response = await fetch('https://app-npkmklju.fly.dev/api/routings', {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       if (response.ok) {
@@ -124,7 +124,7 @@ export default function BOMsPage() {
     e.preventDefault()
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch('https://app-twlwzpul.fly.dev/api/boms', {
+      const response = await fetch('https://app-npkmklju.fly.dev/api/boms', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -155,7 +155,7 @@ export default function BOMsPage() {
     
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch(`https://app-twlwzpul.fly.dev/api/boms/${bomId}`, {
+      const response = await fetch(`https://app-npkmklju.fly.dev/api/boms/${bomId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       })
