@@ -30,7 +30,7 @@ export default function MaterialsPage() {
   const fetchMaterials = async () => {
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch('http://localhost:8000/api/materials', {
+      const response = await fetch('https://app-npkmklju.fly.dev/api/materials', {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       if (response.ok) {
@@ -48,7 +48,7 @@ export default function MaterialsPage() {
     e.preventDefault()
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch('http://localhost:8000/api/materials', {
+      const response = await fetch('https://app-npkmklju.fly.dev/api/materials', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -73,7 +73,7 @@ export default function MaterialsPage() {
   const handleUpdateStock = async (materialId: string, quantity: number) => {
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch(`http://localhost:8000/api/materials/${materialId}/stock`, {
+      const response = await fetch(`https://app-npkmklju.fly.dev/api/materials/${materialId}/stock`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -97,7 +97,7 @@ export default function MaterialsPage() {
     
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch(`http://localhost:8000/api/materials/${materialId}`, {
+      const response = await fetch(`https://app-npkmklju.fly.dev/api/materials/${materialId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       })
@@ -133,7 +133,7 @@ export default function MaterialsPage() {
     try {
       const token = localStorage.getItem('token')
       const newStatus = currentStatus === 'enabled' ? 'disabled' : 'enabled'
-      const response = await fetch(`http://localhost:8000/api/materials/${materialId}`, {
+      const response = await fetch(`https://app-npkmklju.fly.dev/api/materials/${materialId}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
