@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react'
 import { Plus, Trash2, Package } from 'lucide-react'
+import { Switch } from '../components/ui/switch'
 
 interface Material {
   id: string
   name: string
   type: 'raw_material' | 'semi_finished' | 'finished_good'
   stock: number
+  status: 'enabled' | 'disabled'
   unit: string
   created_at: string
 }
@@ -28,7 +30,7 @@ export default function MaterialsPage() {
   const fetchMaterials = async () => {
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch('https://app-npkmklju.fly.dev/api/materials', {
+      const response = await fetch('http://localhost:8000/api/materials', {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       if (response.ok) {
@@ -46,7 +48,7 @@ export default function MaterialsPage() {
     e.preventDefault()
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch('https://app-npkmklju.fly.dev/api/materials', {
+      const response = await fetch('http://localhost:8000/api/materials', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -71,7 +73,7 @@ export default function MaterialsPage() {
   const handleUpdateStock = async (materialId: string, quantity: number) => {
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch(`https://app-npkmklju.fly.dev/api/materials/${materialId}/stock`, {
+      const response = await fetch(`http://localhost:8000/api/materials/${materialId}/stock`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -95,7 +97,7 @@ export default function MaterialsPage() {
     
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch(`https://app-npkmklju.fly.dev/api/materials/${materialId}`, {
+      const response = await fetch(`http://localhost:8000/api/materials/${materialId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       })
@@ -117,6 +119,37 @@ export default function MaterialsPage() {
       finished_good: '成品'
     }
     return typeNames[type as keyof typeof typeNames] || type
+  }
+
+  const getStatusName = (status: string) => {
+    return status === 'enabled' ? '启用' : '禁用'
+  }
+
+  const getStatusColor = (status: string) => {
+    return status === 'enabled' ? 'text-green-600' : 'text-red-600'
+  }
+
+  const handleToggleStatus = async (materialId: string, currentStatus: string) => {
+    try {
+      const token = localStorage.getItem('token')
+      const newStatus = currentStatus === 'enabled' ? 'disabled' : 'enabled'
+      const response = await fetch(`http://localhost:8000/api/materials/${materialId}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ status: newStatus })
+      })
+      
+      if (response.ok) {
+        fetchMaterials()
+      } else {
+        alert('更新物料状态失败')
+      }
+    } catch (error) {
+      alert('更新物料状态失败')
+    }
   }
 
   if (loading) {
@@ -228,6 +261,9 @@ export default function MaterialsPage() {
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       单位
                     </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      状态
+                    </th>
                     <th className="relative px-6 py-3">
                       <span className="sr-only">操作</span>
                     </th>
@@ -247,6 +283,17 @@ export default function MaterialsPage() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {material.unit}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">
+                        <div className="flex items-center space-x-2">
+                          <Switch
+                            checked={material.status === 'enabled'}
+                            onCheckedChange={() => handleToggleStatus(material.id, material.status)}
+                          />
+                          <span className={getStatusColor(material.status)}>
+                            {getStatusName(material.status)}
+                          </span>
+                        </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
                         <button

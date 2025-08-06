@@ -29,6 +29,10 @@ class TaskStatus(str, enum.Enum):
     IN_PROGRESS = "in_progress"
     COMPLETED = "completed"
 
+class MaterialStatus(str, enum.Enum):
+    ENABLED = "enabled"
+    DISABLED = "disabled"
+
 class User(Base):
     __tablename__ = "users"
     
@@ -46,6 +50,7 @@ class Material(Base):
     name = Column(String, nullable=False)
     type = Column(Enum(MaterialType), nullable=False)
     stock = Column(Integer, default=0)
+    status = Column(Enum(MaterialStatus), default=MaterialStatus.ENABLED)
     created_at = Column(DateTime, server_default=func.now())
 
 class ProductionLine(Base):

@@ -11,7 +11,7 @@ import secrets
 from sqlalchemy.orm import Session
 from .database import get_db, engine, SessionLocal
 from .models import Base, User, Material, ProductionLine, Routing, BOM, WorkOrder, ProductionTask, InspectionTask, Session as SessionModel
-from .models import UserRole, MaterialType, ProductionLineStatus, WorkOrderStatus, TaskStatus
+from .models import UserRole, MaterialType, MaterialStatus, ProductionLineStatus, WorkOrderStatus, TaskStatus
 
 app = FastAPI(title="MES Production Execution System")
 
@@ -33,6 +33,7 @@ async def startup_event():
     try:
         create_default_admin(db)
         create_test_users(db)
+        migrate_material_status(db)
     finally:
         db.close()
 
@@ -73,6 +74,13 @@ def create_test_users(db: Session):
             db.add(user)
     db.commit()
 
+def migrate_material_status(db: Session):
+    materials_without_status = db.query(Material).filter(Material.status == None).all()
+    for material in materials_without_status:
+        material.status = MaterialStatus.ENABLED
+    if materials_without_status:
+        db.commit()
+
 
 
 class UserCreate(BaseModel):
@@ -92,6 +100,7 @@ class MaterialCreate(BaseModel):
 class MaterialUpdate(BaseModel):
     name: Optional[str] = None
     type: Optional[MaterialType] = None
+    status: Optional[MaterialStatus] = None
 
 class StockUpdate(BaseModel):
     quantity: int
@@ -274,7 +283,7 @@ async def delete_user(user_id: str, current_user: dict = Depends(require_role([U
     return {"message": "User deleted successfully"}
 
 @app.post("/api/materials")
-async def create_material(material: MaterialCreate, current_user: dict = Depends(require_role([UserRole.MANAGER])), db: Session = Depends(get_db)):
+async def create_material(material: MaterialCreate, current_user: dict = Depends(require_role([UserRole.ADMIN, UserRole.MANAGER])), db: Session = Depends(get_db)):
     material_id = generate_id()
     new_material = Material(
         id=material_id,
@@ -290,6 +299,7 @@ async def create_material(material: MaterialCreate, current_user: dict = Depends
         "name": new_material.name,
         "type": new_material.type,
         "stock": new_material.stock,
+        "status": new_material.status,
         "created_at": new_material.created_at
     }
 
@@ -301,11 +311,12 @@ async def list_materials(current_user: dict = Depends(get_current_user), db: Ses
         "name": material.name,
         "type": material.type,
         "stock": material.stock,
+        "status": material.status,
         "created_at": material.created_at
     } for material in materials]
 
 @app.put("/api/materials/{material_id}")
-async def update_material(material_id: str, material_update: MaterialUpdate, current_user: dict = Depends(require_role([UserRole.MANAGER])), db: Session = Depends(get_db)):
+async def update_material(material_id: str, material_update: MaterialUpdate, current_user: dict = Depends(require_role([UserRole.ADMIN, UserRole.MANAGER])), db: Session = Depends(get_db)):
     material = db.query(Material).filter(Material.id == material_id).first()
     if not material:
         raise HTTPException(status_code=404, detail="Material not found")
@@ -314,6 +325,8 @@ async def update_material(material_id: str, material_update: MaterialUpdate, cur
         material.name = material_update.name
     if material_update.type is not None:
         material.type = material_update.type
+    if material_update.status is not None:
+        material.status = material_update.status
     
     db.commit()
     db.refresh(material)
@@ -322,6 +335,7 @@ async def update_material(material_id: str, material_update: MaterialUpdate, cur
         "name": material.name,
         "type": material.type,
         "stock": material.stock,
+        "status": material.status,
         "created_at": material.created_at
     }
 
@@ -344,7 +358,7 @@ async def update_stock(material_id: str, stock_update: StockUpdate, current_user
     }
 
 @app.delete("/api/materials/{material_id}")
-async def delete_material(material_id: str, current_user: dict = Depends(require_role([UserRole.MANAGER])), db: Session = Depends(get_db)):
+async def delete_material(material_id: str, current_user: dict = Depends(require_role([UserRole.ADMIN, UserRole.MANAGER])), db: Session = Depends(get_db)):
     material = db.query(Material).filter(Material.id == material_id).first()
     if not material:
         raise HTTPException(status_code=404, detail="Material not found")
@@ -515,6 +529,8 @@ async def create_routing(routing: RoutingCreate, current_user: dict = Depends(re
     finished_product = db.query(Material).filter(Material.id == routing.finished_product_id).first()
     if not finished_product:
         raise HTTPException(status_code=400, detail="Finished product not found")
+    if finished_product.status == MaterialStatus.DISABLED:
+        raise HTTPException(status_code=400, detail="Cannot use disabled material for routing")
     
     if finished_product.type != MaterialType.FINISHED_GOOD:
         raise HTTPException(status_code=400, detail="Product must be a finished good")
@@ -532,6 +548,8 @@ async def create_routing(routing: RoutingCreate, current_user: dict = Depends(re
         material = db.query(Material).filter(Material.id == op.output_material_id).first()
         if not material:
             raise HTTPException(status_code=400, detail=f"Operation {i+1} output material not found")
+        if material.status == MaterialStatus.DISABLED:
+            raise HTTPException(status_code=400, detail=f"Cannot use disabled material in operation {i+1}")
         if material.type != MaterialType.SEMI_FINISHED:
             raise HTTPException(status_code=400, detail=f"Operation {i+1} must output semi-finished material")
     
@@ -598,6 +616,8 @@ async def create_bom(bom: BOMCreate, current_user: dict = Depends(require_role([
         material = db.query(Material).filter(Material.id == comp.material_id).first()
         if not material:
             raise HTTPException(status_code=400, detail=f"Material {comp.material_id} not found")
+        if material.status == MaterialStatus.DISABLED:
+            raise HTTPException(status_code=400, detail=f"Cannot use disabled material {material.name} in BOM")
         if material.type != MaterialType.RAW_MATERIAL:
             raise HTTPException(status_code=400, detail="BOM components must be raw materials")
         
@@ -960,6 +980,8 @@ async def feed_material(task_id: str, feeding: MaterialFeeding, current_user: di
         raise HTTPException(status_code=400, detail="Feeding quantity exceeds requirement")
     
     material = db.query(Material).filter(Material.id == feeding.material_id).first()
+    if material.status == MaterialStatus.DISABLED:
+        raise HTTPException(status_code=400, detail="Cannot feed disabled material")
     if material.stock < feeding.quantity:
         raise HTTPException(status_code=400, detail="Insufficient material stock")
     
