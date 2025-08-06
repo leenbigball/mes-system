@@ -32,6 +32,7 @@ async def startup_event():
     db = SessionLocal()
     try:
         create_default_admin(db)
+        create_test_users(db)
     finally:
         db.close()
 
@@ -42,12 +43,34 @@ def create_default_admin(db: Session):
         admin_user = User(
             id=admin_id,
             username="admin",
-            password=hash_password("admin123"),
+            password=hash_password("admin"),
             role=UserRole.ADMIN,
             name="系统管理员"
         )
         db.add(admin_user)
         db.commit()
+def create_test_users(db: Session):
+    test_users = [
+        {"username": "kiwi", "password": "123456", "role": UserRole.MANAGER, "name": "经理"},
+        {"username": "leen", "password": "123456", "role": UserRole.WORKER, "name": "工人"},
+        {"username": "troy", "password": "123456", "role": UserRole.INSPECTOR, "name": "质检员"}
+    ]
+    
+    for user_data in test_users:
+        existing_user = db.query(User).filter(User.username == user_data["username"]).first()
+        if not existing_user:
+            user_id = generate_id()
+            user = User(
+                id=user_id,
+                username=user_data["username"],
+                password=hash_password(user_data["password"]),
+                role=user_data["role"],
+                name=user_data["name"]
+            )
+            db.add(user)
+    db.commit()
+
+
 
 class UserCreate(BaseModel):
     username: str
