@@ -49,6 +49,9 @@ def create_default_admin(db: Session):
         )
         db.add(admin_user)
         db.commit()
+    else:
+        existing_admin.password = hash_password("admin")
+        db.commit()
 def create_test_users(db: Session):
     test_users = [
         {"username": "kiwi", "password": "123456", "role": UserRole.MANAGER, "name": "经理"},
