@@ -9,7 +9,7 @@ import uuid
 import hashlib
 import secrets
 from sqlalchemy.orm import Session
-from .database import get_db, engine
+from .database import get_db, engine, SessionLocal
 from .models import Base, User, Material, ProductionLine, Routing, BOM, WorkOrder, ProductionTask, InspectionTask, Session as SessionModel
 from .models import UserRole, MaterialType, ProductionLineStatus, WorkOrderStatus, TaskStatus
 
