@@ -29,6 +29,11 @@ security = HTTPBearer()
 @app.on_event("startup")
 async def startup_event():
     Base.metadata.create_all(bind=engine)
+    db = SessionLocal()
+    try:
+        create_default_admin(db)
+    finally:
+        db.close()
 
 def create_default_admin(db: Session):
     existing_admin = db.query(User).filter(User.username == "admin").first()
